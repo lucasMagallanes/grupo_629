@@ -51,12 +51,6 @@
                     android:text="email"
                     android:textAlignment="textEnd" />
 
-                <TextView
-                    android:id="@+id/tvNombreUsuario"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="nombre de usuario"
-                    android:textAlignment="textEnd" />
             </LinearLayout>
 
         </LinearLayout>

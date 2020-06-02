@@ -13,8 +13,10 @@ class Contacto : AppCompatActivity() {
         setContentView(R.layout.activity_contacto)
 
         btnConIrAHome.setOnClickListener{
-            //Hacer las validaciones acá
+            val intentActual = intent
             val intent = Intent(this, Home::class.java)
+            intent.putExtra("email", intentActual.getStringExtra("email"))
+            intent.putExtra("token", intentActual.getStringExtra("token"))
             startActivity(intent)
         }
     }

@@ -51,12 +51,6 @@
                     android:text="email"
                     android:textAlignment="textEnd" />
 
-                <TextView
-                    android:id="@+id/tvNombreUsuario"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="nombre de usuario"
-                    android:textAlignment="textEnd" />
             </LinearLayout>
 
         </LinearLayout>
@@ -65,6 +59,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnEscucharEventos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Escuchar eventos de sensores" />
 
             <Spinner
                 android:id="@+id/spnTipoEvento"

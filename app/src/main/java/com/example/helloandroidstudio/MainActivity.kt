@@ -10,19 +10,24 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import com.example.helloandroidstudio.Modelos.Evento
 import com.example.helloandroidstudio.Modelos.ResponseEvento
 import com.example.helloandroidstudio.Modelos.ResponseLoguin
 import com.example.helloandroidstudio.Modelos.Usuario
 import com.example.helloandroidstudio.ServicioAPI.ObjetoRetrofit
+import com.example.helloandroidstudio.Utilidades.LoadingAnimation
+import com.example.helloandroidstudio.Utilidades.LoadingAsync
+import com.example.helloandroidstudio.Utilidades.LoadingImplementation
+import com.example.helloandroidstudio.Utilidades.Utilidades
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.regex.Pattern
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {//, LoadingImplementation
 
+    //private lateinit var loadingAnimation : LoadingAnimation
     private val objetoRetrofit = ObjetoRetrofit("http://so-unlam.net.ar/api/api/")
     val TAG_LOGS = "Log personalizado"
 
@@ -30,11 +35,14 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        simpleProgressBar.setVisibility(View.INVISIBLE);
         inicializarPrueba()
         btnLoguearse.setOnClickListener{
             if(! verificarConectividad()){
                 Toast.makeText(applicationContext, "No hay internet, verifique la conexión de su dispositivo" , Toast.LENGTH_SHORT).show()
             }else if(validarCampos()){
+                val simpleProgressBar:ProgressBar = findViewById(R.id.simpleProgressBar)
+                simpleProgressBar.setVisibility(View.VISIBLE)
                 loguear()
             }
         }
@@ -42,7 +50,17 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, Registro::class.java)
             startActivity(intent)
         }
+
+        //Cargar loader
+//        loadingAnimation = LoadingAnimation(this, "./assets/loading.json")//"loading.json")//./loading.json")
+//        loadingAnimation.playAnimation(true)
+//        LoadingAsync(this).execute()
     }
+
+//    override fun onFinishedLoading() {
+//        //# After loading is done, stop the animation and reset the current view
+//        loadingAnimation.stopAnimation(R.layout.activity_main)
+//    }
 
     private fun verificarConectividad(): Boolean {
         val connectivityManager =
@@ -140,4 +158,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+//    val loadingAnimation = LoadingAnimation(this, "loading.json")
+//    loadingAnimation.playAnimation(true)
 }

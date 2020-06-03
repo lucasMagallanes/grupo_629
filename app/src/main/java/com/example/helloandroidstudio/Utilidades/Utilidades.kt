@@ -1,4 +1,4 @@
-package com.example.helloandroidstudio
+package com.example.helloandroidstudio.Utilidades
 
 import android.content.Context
 import androidx.appcompat.app.AlertDialog

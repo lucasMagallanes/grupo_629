@@ -60,12 +60,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnEscucharEventos"
+            <TextView
+                android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Escuchar eventos de sensores" />
+                android:text="Sensores disponibles"
+                android:textAlignment="center" />
 
             <Spinner
                 android:id="@+id/spnTipoEvento"
@@ -73,11 +73,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp" />
 
-            <GridView
-                android:id="@+id/grdEventos"
+            <Button
+                android:id="@+id/btnEscucharEventos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp" />
+                android:layout_margin="10dp"
+                android:text="Escuchar evento" />
 
         </LinearLayout>
 

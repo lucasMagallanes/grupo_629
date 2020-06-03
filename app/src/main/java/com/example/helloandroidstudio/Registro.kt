@@ -2,7 +2,6 @@ package com.example.helloandroidstudio
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,15 +11,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.helloandroidstudio.Modelos.ResponseLoguin
 import com.example.helloandroidstudio.Modelos.Usuario
-import com.example.helloandroidstudio.ServicioAPI.ApiService
 import com.example.helloandroidstudio.ServicioAPI.ObjetoRetrofit
+import com.example.helloandroidstudio.Utilidades.Utilidades
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.btnRegistrarse
 import kotlinx.android.synthetic.main.activity_registro.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.regex.Pattern
 
 class Registro : AppCompatActivity() {
 

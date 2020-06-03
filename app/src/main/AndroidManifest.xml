@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".VisualizacionEventos"></activity>
+<!--        <activity android:name=".BolaMetal"></activity>-->
+        <activity android:name=".BolaDeMetal" />
+        <activity android:name=".VisualizacionEventos" />
         <activity android:name=".Contacto" />
         <activity android:name=".Registro" />
         <activity android:name=".Home" />

@@ -2,7 +2,10 @@ package com.example.helloandroidstudio
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,48 +26,53 @@ class VisualizacionEventos : AppCompatActivity(), AdapterView.OnItemSelectedList
         setContentView(R.layout.activity_visualizacion_eventos)
         val intentActual = intent
         val tvEmail: TextView = findViewById(R.id.tvEmail)
+        val tvActivarSensorProximidad: TextView = findViewById(R.id.tvActivarSensorProximidad)
+        tvActivarSensorProximidad.setVisibility(View.INVISIBLE)
         tvEmail.text = intentActual.getStringExtra("email")
-        //llenarComboEventos()
         llenarComboSensores()
+
         btnVisIrAHome.setOnClickListener{
             val intent = Intent(this, Home::class.java)
             intent.putExtra("email", intentActual.getStringExtra("email"))
             intent.putExtra("token", intentActual.getStringExtra("token"))
             startActivity(intent)
         }
+
+        btnVisIrAHome.setOnClickListener{
+            val intent = Intent(this, BolaDeMetal::class.java)
+            intent.putExtra("email", intentActual.getStringExtra("email"))
+            intent.putExtra("token", intentActual.getStringExtra("token"))
+            startActivity(intent)
+        }
+
         btnEscucharEventos.setOnClickListener{
             escucharEventoProximidad()
+            tvActivarSensorProximidad.setVisibility(View.VISIBLE)
         }
     }
-
-   // var sensor: Sensor = null;
-//    var sensorManager:SensorManager = null;
-//    var sensorEventListener:SensorEventListener = null;
+    private lateinit var  sensorManager:SensorManager
 
     private fun escucharEventoProximidad(){
-//        var sensor: Sensor
-//        var sensorManager:SensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-//        //var sensorEventListener: SensorEventListener
-//
-//        val proximitySensor:Sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY) //final
-//
-//        var proximitySensorListener = SensorEventListener(){
-//
-//            @Override
-//            fun onSensorChanged(sensorEvent: SensorEvent){
-//                if(sensorEvent.values[0] < proximitySensor.maximumRange()){
-//                    getWindow().getDecorView().setBackgroundColor(Color.RED)
-//                }else{
-//                    getWindow().getDecorView().setBackgroundColor(Color.BLUE)
-//                }
-//            }
-//
-//            @Override
-//            fun onAccuracyChanged(sensor:Sensor, i:Int){
-//            }
-//
-//        }
-//        sensorManager.registerListener(proximitySensorListener, proximitySensor, 2*1000*1000)
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val proximitySensor:Sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
+
+        val proximitySensorListener = object:SensorEventListener{
+
+            override fun onSensorChanged(sensorEvent:SensorEvent){
+                if(sensorEvent.values[0] < proximitySensor.getMaximumRange()){
+                    getWindow().getDecorView().setBackgroundColor(Color.RED)
+                    //RegistrarEvento al igual que se hizo como cuando se loguea
+                }else{
+                    getWindow().getDecorView().setBackgroundColor(Color.BLUE)
+                    //RegistrarEvento al igual que se hizo como cuando se loguea
+                }
+            }
+
+            override fun onAccuracyChanged(sensor:Sensor, i:Int){
+            }
+
+        }
+        sensorManager.registerListener(proximitySensorListener, proximitySensor, 2*1000*1000)
     }
 
     private lateinit var mSensorManager: SensorManager

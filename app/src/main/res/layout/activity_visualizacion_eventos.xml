@@ -64,7 +64,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sensores disponibles"
+                android:text="Sensores disponibles de tu dispositivo"
                 android:textAlignment="center" />
 
             <Spinner
@@ -74,11 +74,25 @@
                 android:layout_margin="10dp" />
 
             <Button
+                android:id="@+id/btnBolaDeMetal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ir a bola de metal" />
+
+            <Button
                 android:id="@+id/btnEscucharEventos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Escuchar evento" />
+                android:text="Activar sensor de proximidad" />
+
+            <TextView
+                android:id="@+id/tvActivarSensorProximidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pase la mano por arriba del celular"
+                android:textAlignment="center"
+                app:textAllCaps="false" />
 
         </LinearLayout>
 

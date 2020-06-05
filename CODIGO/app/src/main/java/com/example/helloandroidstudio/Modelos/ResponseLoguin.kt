@@ -3,7 +3,7 @@ package com.example.helloandroidstudio.Modelos
 class ResponseLoguin {
 
     var state:String = "" //success ó error
-    var env:String = "" //TEST ó DEV
+    var env:String = "DEV" //TEST ó DEV
     var user:Usuario = Usuario()
 
     //Cuando hay un error

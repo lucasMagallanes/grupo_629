@@ -6,7 +6,7 @@ package com.example.helloandroidstudio.Modelos
  */
 class Usuario(){
 
-    var env:String = "TEST" //TEST se usa sólo para probar que funcione la API en la registración.
+    var env:String = "DEV" //TEST se usa sólo para probar que funcione la API en la registración.
     var name:String = ""
     var lastname: String = ""
     var dni: Int = 0

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import com.example.helloandroidstudio.Modelos.ResponseLoguin
 import com.example.helloandroidstudio.Modelos.Usuario
 import com.example.helloandroidstudio.ServicioAPI.ObjetoRetrofit
+import com.example.helloandroidstudio.Utilidades.IniciadorSharedPreferences.Companion.gestorSP
 import com.example.helloandroidstudio.Utilidades.Utilidades
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.btnRegistrarse
@@ -98,7 +99,7 @@ class Registro : AppCompatActivity() {
         val campoDNI:EditText = findViewById(R.id.etDNI)
         var usuario: Usuario? = Usuario()
 
-        usuario!!.env = "TEST" //Cambiar a DEV cuando se quiera registrar de verdad.
+        usuario!!.env = "DEV" //Cambiar a DEV cuando se quiera registrar de verdad.
         usuario!!.name = campoNombre.getText().toString()
         usuario!!.lastname = campoApellido.getText().toString()
         usuario!!.dni = campoDNI.getText().toString().toInt()
@@ -116,6 +117,7 @@ class Registro : AppCompatActivity() {
                 if(!response!!.isSuccessful()){
                     mostrarMensajeDeError("Hubo un error en la conexión con el servidor. env: ${response.body()!!.env} token: ${response.body()?.token} Codigo: " +response?.message() + ' ' + response?.code())
                 }else if(response?.code() == 201){
+                    gestorSP.guardarEvento("Registro - ${usuario.email}")
                     mostrarAlerta("Registro exitoso", "Ir a Home", usuario.email, response!!.body()?.token.toString())
                 }else{
                     mostrarMensajeDeError("Hubo algún tipo de falla en la registración de usuario. Error: ${response.body()!!.msg}")

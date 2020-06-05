@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VisualizacionEventos">
+    tools:context=".RealizarEventos">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,65 +57,47 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
             android:orientation="vertical">
 
+            <Button
+                android:id="@+id/btnBolaDeMetal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ir a bola de metal" />
+
+            <Button
+                android:id="@+id/btnEscucharEventos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Activar sensor de proximidad" />
+
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tvActivarSensorProximidad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sensores disponibles de tu dispositivo"
-                android:textAlignment="center" />
-
-            <Spinner
-                android:id="@+id/spnTipoEvento"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Lista de eventos"
-                android:textAlignment="center"/>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ListView
-                    android:id="@+id/lvEventos"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </ScrollView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/btnIrARegistroEventos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/button_rounded"
-                    android:text="Ir a registrar eventos" />
-
-                <Button
-                    android:id="@+id/btnVisIrAHome"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/button_rounded"
-                    android:text="Ir a Home" />
-            </LinearLayout>
+                android:text="Pase la mano por arriba del celular"
+                android:textAlignment="center"
+                app:textAllCaps="false" />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom">
+
+            <Button
+                android:id="@+id/btnVisIrAGestionEventos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_rounded"
+                android:text="Ir a gestión de eventos" />
+        </LinearLayout>
+
     </LinearLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

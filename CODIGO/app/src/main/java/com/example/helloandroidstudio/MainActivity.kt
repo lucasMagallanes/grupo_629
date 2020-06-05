@@ -19,15 +19,12 @@ import com.example.helloandroidstudio.Modelos.ResponseEvento
 import com.example.helloandroidstudio.Modelos.ResponseLoguin
 import com.example.helloandroidstudio.Modelos.Usuario
 import com.example.helloandroidstudio.ServicioAPI.ObjetoRetrofit
-import com.example.helloandroidstudio.Utilidades.LoadingAnimation
-import com.example.helloandroidstudio.Utilidades.LoadingAsync
-import com.example.helloandroidstudio.Utilidades.LoadingImplementation
-import com.example.helloandroidstudio.Utilidades.Utilidades
+import com.example.helloandroidstudio.Utilidades.*
+import com.example.helloandroidstudio.Utilidades.IniciadorSharedPreferences.Companion.gestorSP
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {//, LoadingImplementation
 
-    //private lateinit var loadingAnimation : LoadingAnimation
     private val objetoRetrofit = ObjetoRetrofit("http://so-unlam.net.ar/api/api/")
     val TAG_LOGS = "Log personalizado"
 
@@ -36,32 +33,25 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         simpleProgressBar.setVisibility(View.INVISIBLE);
-        inicializarPrueba()
-        btnLoguearse.setOnClickListener{
-            if(! verificarConectividad()){
-                Toast.makeText(applicationContext, "No hay internet, verifique la conexión de su dispositivo" , Toast.LENGTH_SHORT).show()
-            }else if(validarCampos()){
-                val simpleProgressBar:ProgressBar = findViewById(R.id.simpleProgressBar)
+       // inicializarPrueba()
+        btnLoguearse.setOnClickListener {
+            if (!verificarConectividad()) {
+                Toast.makeText(
+                    applicationContext,
+                    "No hay internet, verifique la conexión de su dispositivo",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if (validarCampos()) {
+                val simpleProgressBar: ProgressBar = findViewById(R.id.simpleProgressBar)
                 simpleProgressBar.setVisibility(View.VISIBLE)
                 loguear()
             }
         }
-        btnRegistrarse.setOnClickListener{
+        btnRegistrarse.setOnClickListener {
             val intent = Intent(this, Registro::class.java)
             startActivity(intent)
         }
-
-        //Cargar loader
-//        loadingAnimation = LoadingAnimation(this, "./assets/loading.json")//"loading.json")//./loading.json")
-//        loadingAnimation.playAnimation(true)
-//        LoadingAsync(this).execute()
     }
-
-//    override fun onFinishedLoading() {
-//        //# After loading is done, stop the animation and reset the current view
-//        loadingAnimation.stopAnimation(R.layout.activity_main)
-//    }
-
     private fun verificarConectividad(): Boolean {
         val connectivityManager =
             getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -138,6 +128,7 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
                     Utilidades.mostrarAlerta(this@MainActivity,"Error", "Hubo un error en la conexión con el servidor. errorBody: ${response.errorBody()}  headers: ${response.headers()} estado: ${response?.body()?.state} env: ${response?.body()?.env}: Codigo: " + response?.message() + ' ' + response?.code())
                 }else if(response?.code() == 201){
                     //Toast.makeText(applicationContext, "Registro exitoso de evento" , Toast.LENGTH_SHORT).show()
+                    gestorSP.guardarEvento("Login - $email")
                     redirigirActivity(email, token)
 
                 }else{
@@ -158,6 +149,4 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
         startActivity(intent)
     }
 
-//    val loadingAnimation = LoadingAnimation(this, "loading.json")
-//    loadingAnimation.playAnimation(true)
 }

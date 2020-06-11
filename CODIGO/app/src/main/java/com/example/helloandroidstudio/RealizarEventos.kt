@@ -36,7 +36,7 @@ class RealizarEventos : AppCompatActivity() {
             intent.putExtra("token", intentActual.getStringExtra("token"))
             startActivity(intent)
         }
-
+        btnBolaDeMetal.setVisibility(View.INVISIBLE)
         btnBolaDeMetal.setOnClickListener{
             val intent = Intent(this, BolaDeMetal::class.java)
             intent.putExtra("email", intentActual.getStringExtra("email"))

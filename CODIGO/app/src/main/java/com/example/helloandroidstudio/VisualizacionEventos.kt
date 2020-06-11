@@ -16,8 +16,6 @@ import kotlinx.android.synthetic.main.activity_visualizacion_eventos.*
 class VisualizacionEventos : AppCompatActivity(), AdapterView.OnItemSelectedListener  {//
 
     val TAG_LOGS = "Log personalizado"
-    private val objetoRetrofit = ObjetoRetrofit("http://so-unlam.net.ar/api/api/event/")
-    private val preferenciaprueba:String = "PREFSPrueba"
     private lateinit var mSensorManager: SensorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +44,18 @@ class VisualizacionEventos : AppCompatActivity(), AdapterView.OnItemSelectedList
 
     private fun listarEventos(){
         val lvEventos:ListView = findViewById(R.id.lvEventos)
-        val aa= ArrayAdapter(this, android.R.layout.simple_list_item_1, gestorSP.obtenerListaEventos())
-        lvEventos!!.setAdapter(aa)
+        val tvExisteEventos:TextView = findViewById(R.id.tvExisteEventos)
+        val lista:List<String> = gestorSP.obtenerListaEventos()
+
+        if(lista.count() > 0){
+            lvEventos.setVisibility(View.VISIBLE)
+            tvExisteEventos.setVisibility(View.INVISIBLE)
+            val aa= ArrayAdapter(this, android.R.layout.simple_list_item_1, lista)
+            lvEventos!!.setAdapter(aa)
+        }else{
+            lvEventos.setVisibility(View.INVISIBLE)
+            tvExisteEventos.setVisibility(View.VISIBLE)
+        }
     }
 
     private fun llenarComboSensores(){

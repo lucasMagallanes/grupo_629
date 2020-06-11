@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import com.example.helloandroidstudio.Modelos.Evento
 import com.example.helloandroidstudio.Modelos.ResponseEvento
@@ -22,18 +23,25 @@ import com.example.helloandroidstudio.ServicioAPI.ObjetoRetrofit
 import com.example.helloandroidstudio.Utilidades.*
 import com.example.helloandroidstudio.Utilidades.IniciadorSharedPreferences.Companion.gestorSP
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONException
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {//, LoadingImplementation
 
     private val objetoRetrofit = ObjetoRetrofit("http://so-unlam.net.ar/api/api/")
     val TAG_LOGS = "Log personalizado"
+    private lateinit var tvProceso:TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         simpleProgressBar.setVisibility(View.INVISIBLE);
-       // inicializarPrueba()
+        tvProceso = findViewById(R.id.tvProceso)
+        tvProceso.setVisibility(View.INVISIBLE)
+        inicializarPrueba()
+        //gestorSP.prefe1.edit().clear().commit()
+        //preferences.edit().remove("text").commit();
         btnLoguearse.setOnClickListener {
             if (!verificarConectividad()) {
                 Toast.makeText(
@@ -53,6 +61,8 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
         }
     }
     private fun verificarConectividad(): Boolean {
+        tvProceso.setVisibility(View.VISIBLE)
+        tvProceso.text = "Verificando conectividad..."
         val connectivityManager =
             getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
@@ -68,6 +78,7 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
     }
 
     private fun validarCampos() : Boolean{
+        tvProceso.text = "Validando campos..."
         var validacion:Boolean =  true
 
         val campoEmail:EditText = findViewById(R.id.etLogEmail)
@@ -85,11 +96,13 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
     }
 
     private fun loguear() {
+        tvProceso.text = "Iniciando proceso de logueo..."
         objetoRetrofit.instanciarRetrofit()
         loguearUsuario(obtenerUsuario())
     }
 
     private fun obtenerUsuario():Usuario{
+        tvProceso.text = "Obteniendo usuario..."
         val campoMail:EditText = findViewById(R.id.etLogEmail)
         val campoContrasenia:EditText= findViewById(R.id.etLogContrasenia)
         var usuario = Usuario(campoMail.text.toString(), campoContrasenia.text.toString())
@@ -98,18 +111,39 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
     }
 
     fun loguearUsuario(usuario:Usuario) {
+        tvProceso.text = "Logueando usuario..."
         objetoRetrofit.service.loginUsuario(usuario).enqueue(object: Callback<ResponseLoguin>{
             override fun onResponse(call: Call<ResponseLoguin>?, response: Response<ResponseLoguin>?) {
-                Log.i(TAG_LOGS, Gson().toJson(response))
-                if(!response!!.isSuccessful()){
+                Log.i(TAG_LOGS, "Response: " + Gson().toJson(response))
+                if(response?.code() == 200){
+                    val token:String = response!!.body()?.token.toString()
+                    loguearEventoLogin(usuario.email, token)
+                }else if(response?.code() == 400){
+                    if (!response.isSuccessful) {
+                        var jsonObject: JSONObject? = null
+                        try {
+                            jsonObject = JSONObject(response.errorBody()!!.string())
+                            val userMessage = jsonObject.getString("msg")
+                            //val internalMessage = jsonObject.getString("state")
+                            Toast.makeText(applicationContext, userMessage , Toast.LENGTH_SHORT).show()
+                            simpleProgressBar.setVisibility(View.INVISIBLE)
+                            tvProceso = findViewById(R.id.tvProceso)
+                            tvProceso.setVisibility(View.INVISIBLE)
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+                    }else{
+                        Log.i(TAG_LOGS, "TEST: Entró al else")
+                    }
+                    //var mError = ErrorPojoClass()
+                    //mError = gson.fromJson(response.errorBody().string(), ErrorPojoClass::class.java)
+                    //Toast.makeText(applicationContext, gson.fromJson(response.errorBody().string()) , Toast.LENGTH_SHORT).show()
+                }else if(!response!!.isSuccessful()){
                     Utilidades.mostrarAlerta(this@MainActivity,"Error", "Hubo un error en la conexión con el servidor. errorBody: ${response.errorBody()}  headers: ${response.headers()} estado: ${response?.body()?.state} env: ${response?.body()?.env}: Codigo: " + response?.message() + ' ' + response?.code())
                     if(response.body() != null){
                         Utilidades.mostrarAlerta(this@MainActivity,"Error 2 ${response!!.body()?.msg}", "")
                     }
-                }else if(response?.code() == 200){
-                    val token:String = response!!.body()?.token.toString()
-                    loguearEventoLogin(usuario.email, token)
-                }else{
+                }else {
                     Utilidades.mostrarAlerta(this@MainActivity,"Error","Hubo algún tipo de falla en el logueo.  estado: ${response?.body()?.state} env: ${response?.body()?.env} Codigo: ${response?.code()} + response?.message() +Error: ${response.body()!!.msg}")
                 }
             }
@@ -121,12 +155,14 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
     }
 
     private fun loguearEventoLogin(email:String, token:String){
+        tvProceso.text = "Logueando evento de usuario..."
         objetoRetrofit.service.registrarEvento(token, Evento( "Login","El usuario con mail ${email}")).enqueue(object: Callback<ResponseEvento>{
             override fun onResponse(call: Call<ResponseEvento>?, response: Response<ResponseEvento>?) {
                 Log.i(TAG_LOGS, Gson().toJson(response))
                 if(!response!!.isSuccessful()){
                     Utilidades.mostrarAlerta(this@MainActivity,"Error", "Hubo un error en la conexión con el servidor. errorBody: ${response.errorBody()}  headers: ${response.headers()} estado: ${response?.body()?.state} env: ${response?.body()?.env}: Codigo: " + response?.message() + ' ' + response?.code())
                 }else if(response?.code() == 201){
+                    tvProceso.text = "Logueo de evento exitoso..."
                     //Toast.makeText(applicationContext, "Registro exitoso de evento" , Toast.LENGTH_SHORT).show()
                     gestorSP.guardarEvento("Login - $email")
                     redirigirActivity(email, token)
@@ -143,6 +179,7 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
     }
 
     private fun redirigirActivity(email:String, token:String){
+        tvProceso.text = "Dirigiéndose al home..."
         val intent = Intent(this@MainActivity, Home::class.java)
         intent.putExtra("email", email)
         intent.putExtra("token", token)

@@ -16,6 +16,7 @@
         android:name=".Utilidades.IniciadorSharedPreferences">
         <activity android:name=".RealizarEventos"></activity>
         <!-- <activity android:name=".BolaMetal"></activity> -->
+<!--        <activity android:name=".BolaDeMetal" />-->
         <activity android:name=".BolaDeMetal" />
         <activity android:name=".VisualizacionEventos" />
         <activity android:name=".Contacto" />

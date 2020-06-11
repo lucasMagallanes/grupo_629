@@ -80,6 +80,12 @@
                 android:text="Lista de eventos"
                 android:textAlignment="center"/>
 
+            <TextView
+                android:id="@+id/tvExisteEventos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

@@ -5,6 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_home.*
+import android.widget.Toast
+import android.view.KeyEvent.KEYCODE_BACK
+import androidx.core.app.ComponentActivity
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.view.KeyEvent
+
 
 class Home : AppCompatActivity() {
 
@@ -30,5 +38,21 @@ class Home : AppCompatActivity() {
             intent.putExtra("token", intentActual.getStringExtra("token"))
             startActivity(intent)
         }
+
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() === 0) {
+            Toast.makeText(
+                applicationContext, "La sesión ha finalizado",
+                Toast.LENGTH_SHORT
+            ).show()
+            val intentActual = intent
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("email", intentActual.getStringExtra("email"))
+            startActivity(intent)
+            return false
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }

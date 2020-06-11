@@ -39,9 +39,15 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
         simpleProgressBar.setVisibility(View.INVISIBLE);
         tvProceso = findViewById(R.id.tvProceso)
         tvProceso.setVisibility(View.INVISIBLE)
-        inicializarPrueba()
-        //gestorSP.prefe1.edit().clear().commit()
-        //preferences.edit().remove("text").commit();
+        val intentActual = intent
+        val etLogEmail: TextView = findViewById(R.id.etLogEmail)
+        val getEmail = intentActual.getStringExtra("email")
+        if (getEmail.isNullOrEmpty()){
+            inicializarPrueba()
+        }else{
+            etLogEmail.text = getEmail
+        }
+        //borrarSharedPreference()
         btnLoguearse.setOnClickListener {
             if (!verificarConectividad()) {
                 Toast.makeText(
@@ -68,6 +74,11 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
         val networkInfo = connectivityManager.activeNetworkInfo
 
         return networkInfo != null && networkInfo.isConnected
+    }
+
+    private fun borrarSharedPreference(){
+        //gestorSP.prefe1.edit().clear().commit()
+        ////preferences.edit().remove("text").commit();
     }
 
     private fun inicializarPrueba(){
@@ -135,9 +146,6 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
                     }else{
                         Log.i(TAG_LOGS, "TEST: Entró al else")
                     }
-                    //var mError = ErrorPojoClass()
-                    //mError = gson.fromJson(response.errorBody().string(), ErrorPojoClass::class.java)
-                    //Toast.makeText(applicationContext, gson.fromJson(response.errorBody().string()) , Toast.LENGTH_SHORT).show()
                 }else if(!response!!.isSuccessful()){
                     Utilidades.mostrarAlerta(this@MainActivity,"Error", "Hubo un error en la conexión con el servidor. errorBody: ${response.errorBody()}  headers: ${response.headers()} estado: ${response?.body()?.state} env: ${response?.body()?.env}: Codigo: " + response?.message() + ' ' + response?.code())
                     if(response.body() != null){
@@ -148,6 +156,7 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
                 }
             }
             override fun onFailure(call: Call<ResponseLoguin>?, t: Throwable?) {
+                Log.i(TAG_LOGS, "Falló la petición: ${t.toString()}")
                 Utilidades.mostrarAlerta(this@MainActivity,"Entró a onFailure de registrar usuario", "")
                 t?.printStackTrace()
             }

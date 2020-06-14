@@ -62,10 +62,19 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/btnBolaDeMetal"
+                android:id="@+id/btnActivarGiroscopio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ir a bola de metal" />
+                android:layout_margin="10dp"
+                android:text="Activar sensor de giroscopio" />
+
+            <TextView
+                android:id="@+id/tvActivarSensorGiroscopio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Gire el celular"
+                android:textAlignment="center"
+                app:textAllCaps="false" />
 
             <Button
                 android:id="@+id/btnEscucharEventos"

@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {//, LoadingImplementation
     }
 
     private fun borrarSharedPreference(){
-        //gestorSP.prefe1.edit().clear().commit()
+        gestorSP.prefe1.edit().clear().commit()
         ////preferences.edit().remove("text").commit();
     }
 

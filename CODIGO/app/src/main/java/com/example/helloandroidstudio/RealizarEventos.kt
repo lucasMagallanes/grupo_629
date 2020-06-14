@@ -12,15 +12,20 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
-import com.example.helloandroidstudio.ServicioAPI.ObjetoRetrofit
 import com.example.helloandroidstudio.Utilidades.IniciadorSharedPreferences.Companion.gestorSP
 import kotlinx.android.synthetic.main.activity_realizar_eventos.*
 
 class RealizarEventos : AppCompatActivity() {
 
-    //private val objetoRetrofit = ObjetoRetrofit("http://so-unlam.net.ar/api/api/event/")
     private lateinit var  sensorManager:SensorManager
+    private var ladoActivado:Lado = Lado.ninguno
+    private enum class Lado{
+        ninguno,
+        verde,
+        amarillo,
+        azul,
+        rojo
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,26 +34,24 @@ class RealizarEventos : AppCompatActivity() {
         val intentActual = intent
         val tvEmail: TextView = findViewById(R.id.tvEmail)
         val tvActivarSensorProximidad: TextView = findViewById(R.id.tvActivarSensorProximidad)
+        val tvActivarSensorGiroscopio: TextView = findViewById(R.id.tvActivarSensorGiroscopio)
         tvActivarSensorProximidad.setVisibility(View.INVISIBLE)
+        tvActivarSensorGiroscopio.setVisibility(View.INVISIBLE)
         tvEmail.text = intentActual.getStringExtra("email")
 
-        btnVisIrAGestionEventos.setOnClickListener{
+        btnVisIrAGestionEventos.setOnClickListener {
             val intent = Intent(this, VisualizacionEventos::class.java)
             intent.putExtra("email", intentActual.getStringExtra("email"))
             intent.putExtra("token", intentActual.getStringExtra("token"))
             startActivity(intent)
         }
-        btnBolaDeMetal.setVisibility(View.INVISIBLE)
-        btnBolaDeMetal.setOnClickListener{
-            val intent = Intent(this, BolaDeMetal::class.java)
-            intent.putExtra("email", intentActual.getStringExtra("email"))
-            intent.putExtra("token", intentActual.getStringExtra("token"))
-            startActivity(intent)
-        }
-
         btnEscucharEventos.setOnClickListener{
             escucharEventoProximidad()
             tvActivarSensorProximidad.setVisibility(View.VISIBLE)
+        }
+        btnActivarGiroscopio.setOnClickListener{
+            escucharEventoGiroscopio()
+            tvActivarSensorGiroscopio.setVisibility(View.VISIBLE)
         }
     }
 
@@ -87,6 +90,36 @@ class RealizarEventos : AppCompatActivity() {
 
         }
         sensorManager.registerListener(proximitySensorListener, proximitySensor, 2*1000*1000)
+    }
+
+    private fun escucharEventoGiroscopio(){
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val gyroscopeSensor : Sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
+
+        val gyroscopeSensorListener = object : SensorEventListener {
+            override fun onSensorChanged(sensorEvent: SensorEvent) {
+                if(sensorEvent.values[2] > 0.5f) { // anticlockwise
+                    if(ladoActivado != Lado.verde){
+                        getWindow().getDecorView().setBackgroundColor(Color.GREEN);
+                        gestorSP.guardarEvento("Sensor giroscopio - Se activo el background verde")
+                        //RegistrarEvento al igual que se hizo como cuando se loguea
+                        ladoActivado = Lado.verde
+                    }
+                } else if(sensorEvent.values[2] < -0.5f) { // clockwise
+                    if(ladoActivado != Lado.amarillo){
+                        getWindow().getDecorView().setBackgroundColor(Color.YELLOW);
+                        gestorSP.guardarEvento("Sensor giroscopio - Se activo el background amarillo")
+                        //RegistrarEvento al igual que se hizo como cuando se loguea
+                        ladoActivado = Lado.amarillo
+                    }
+                }
+            }
+
+            override fun onAccuracyChanged(sensor: Sensor, i: Int) {}
+        }
+
+        // Register the listener
+        sensorManager.registerListener(gyroscopeSensorListener, gyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
 }
